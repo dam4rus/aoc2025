@@ -11,7 +11,8 @@ defmodule Day2 do
 
   def is_invalid?(input, chunk_size) when is_binary(input) and chunk_size > 0 do
     [head | tail] =
-      String.graphemes(input) |> Enum.chunk_every(chunk_size, chunk_size, Stream.cycle([-1]))
+      String.graphemes(input)
+      |> Enum.chunk_every(chunk_size, chunk_size, Stream.cycle([:invalid]))
 
     tail |> Enum.all?(fn value -> value == head end)
   end
