@@ -15,6 +15,14 @@ defmodule Day2Test do
     assert Day2.is_invalid?("38593859")
   end
 
+  test "111 is invalid when using chunk size 1" do
+    assert Day2.is_invalid?("111", 1)
+  end
+
+  test "2121212121 is invalid when using chunk size 2" do
+    assert Day2.is_invalid?("2121212121", 2)
+  end
+
   test "identifies valid id" do
     assert Day2.is_invalid?("10") == false
     assert Day2.is_invalid?("20") == false
@@ -22,10 +30,14 @@ defmodule Day2Test do
   end
 
   test "invalid ids between 11-22 should be 2" do
-    assert Day2.invalid_ids_in_range(11..22) == [11, 22]
+    assert Day2.invalid_ids_in_range(11..22, :at_most_twice) == [11, 22]
   end
 
   test "part one" do
-    assert Day2.sum_invalid_ids(test_input()) == 1_227_775_554
+    assert Day2.sum_invalid_ids(test_input(), :at_most_twice) == 1_227_775_554
+  end
+
+  test "part two" do
+    assert Day2.sum_invalid_ids(test_input(), :at_least_twice) == 4_174_379_265
   end
 end
