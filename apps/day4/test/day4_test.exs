@@ -15,7 +15,7 @@ defmodule Day4Test do
 
   test "input parsed as grid" do
     assert Grid.from_input(input()) == %Grid{
-             grid: [
+             map: [
                [".", ".", "@", "@", ".", "@", "@", "@", "@", "."],
                ["@", "@", "@", ".", "@", ".", "@", ".", "@", "@"],
                ["@", "@", "@", "@", "@", ".", "@", ".", "@", "@"],
@@ -32,7 +32,30 @@ defmodule Day4Test do
            }
   end
 
+  test "marks accessable roll of papers as x" do
+    assert Day4.mark_accessable_roll_of_papers(Grid.from_input(input())) == %Grid{
+             map: [
+               [".", ".", "x", "x", ".", "x", "x", "@", "x", "."],
+               ["x", "@", "@", ".", "@", ".", "@", ".", "@", "@"],
+               ["@", "@", "@", "@", "@", ".", "x", ".", "@", "@"],
+               ["@", ".", "@", "@", "@", "@", ".", ".", "@", "."],
+               ["x", "@", ".", "@", "@", "@", "@", ".", "@", "x"],
+               [".", "@", "@", "@", "@", "@", "@", "@", ".", "@"],
+               [".", "@", ".", "@", ".", "@", ".", "@", "@", "@"],
+               ["x", ".", "@", "@", "@", ".", "@", "@", "@", "@"],
+               [".", "@", "@", "@", "@", "@", "@", "@", "@", "."],
+               ["x", ".", "x", ".", "@", "@", "@", ".", "x", "."]
+             ],
+             width: 10,
+             height: 10
+           }
+  end
+
   test "returns correct answer for part one" do
-    assert Day4.count_accessable_roll_of_papers(input()) == 13
+    assert Day4.count_accessable_roll_of_papers(input(), :once) == 13
+  end
+
+  test "returns correct answer for part two" do
+    assert Day4.count_accessable_roll_of_papers(input(), :until_empty) == 43
   end
 end
