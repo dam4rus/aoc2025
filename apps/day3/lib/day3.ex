@@ -46,11 +46,7 @@ defmodule Day3 do
 
         # Find the greatest number in a subset when there are still batteries that will be left turned off.
         skip_count ->
-          subset =
-            graphemes
-            |> Stream.drop(start_index)
-            |> Stream.take(skip_count + 1)
-            |> Enum.to_list()
+          subset = Enum.slice(graphemes, start_index..(start_index + skip_count))
 
           max = subset |> Enum.max()
           index = subset |> Enum.find_index(fn n -> n == max end)
