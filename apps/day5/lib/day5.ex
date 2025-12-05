@@ -23,9 +23,8 @@ defmodule Day5 do
         %Range{} = range,
         ranges
       )
-      when is_list(ranges) do
-    merge_overlapping(range, ranges, [])
-  end
+      when is_list(ranges),
+      do: merge_overlapping(range, ranges, [])
 
   @spec merge_overlapping(Range.t(), [Range.t()], [Range.t()]) :: {Range.t(), [Range.t()]}
   defp merge_overlapping(
