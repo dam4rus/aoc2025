@@ -25,4 +25,12 @@ defmodule Day5Test do
   test "part one" do
     assert Day5.count_fresh_ingredients(input()) == 3
   end
+
+  test "part two" do
+    assert Day5.merge_ranges(
+             [3..5, 10..14, 16..20, 12..18]
+             |> Enum.sort_by(fn %Range{first: first} -> first end)
+           )
+           |> Enum.sum_by(&Range.size/1) == 14
+  end
 end
