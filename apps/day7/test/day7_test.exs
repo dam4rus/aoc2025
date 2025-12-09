@@ -36,4 +36,13 @@ defmodule Day7Test do
   test "part one" do
     assert input() |> Day7.count_splits_in_input() == 21
   end
+
+  # test "timeline returns correct sum" do
+  #   {start, splitters} = input() |> Day7.parse_input()
+  #   assert Day7.timeline(%{start => 1}, splitters) == 40
+  # end
+
+  test "part two" do
+    assert input() |> Day7.count_timelines_in_input() == 40
+  end
 end
