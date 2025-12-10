@@ -1,9 +1,11 @@
 defmodule Day8 do
+  @spec parse_input(String.t()) :: [[non_neg_integer()]]
   def parse_input(input) when is_bitstring(input) do
     String.split(input, "\n")
     |> Enum.map(fn line -> String.split(line, ",") |> Enum.map(&String.to_integer/1) end)
   end
 
+  @spec product_of_connections(String.t(), non_neg_integer()) :: non_neg_integer()
   def product_of_connections(input, take \\ 1000) when is_bitstring(input),
     do:
       input
@@ -17,6 +19,30 @@ defmodule Day8 do
       |> Enum.take(3)
       |> Enum.product()
 
+  @spec multiply_x_coordinates_of_last_two_junction_boxes_that_needs_to_be_connected(String.t()) ::
+          non_neg_integer()
+  def multiply_x_coordinates_of_last_two_junction_boxes_that_needs_to_be_connected(input)
+      when is_bitstring(input) do
+    points = parse_input(input)
+
+    [[x1, _, _], [x2, _, _], _] =
+      points
+      |> Day8.calculate_distances()
+      |> Enum.sort_by(fn [_, _, distance] -> distance end)
+      |> Enum.reduce_while([], fn connection, acc ->
+        case Day8.connect([connection], acc) do
+          [single_box] when length(single_box) == length(points) ->
+            {:halt, connection}
+
+          acc ->
+            {:cont, acc}
+        end
+      end)
+
+    x1 * x2
+  end
+
+  @spec connect([[non_neg_integer()]], [[non_neg_integer()]]) :: [[non_neg_integer()]]
   def connect([], acc), do: acc
 
   def connect([[pt1, pt2, _] | tail], acc) do
@@ -58,6 +84,7 @@ defmodule Day8 do
     end
   end
 
+  @spec calculate_distances([[non_neg_integer()]]) :: [[non_neg_integer()]]
   def calculate_distances([]), do: []
 
   def calculate_distances([head | tail]),

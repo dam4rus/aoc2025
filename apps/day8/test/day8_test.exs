@@ -28,17 +28,6 @@ defmodule Day8Test do
   end
 
   test "connects points" do
-    # IO.inspect(
-    #   input()
-    #   |> Day8.parse_input()
-    #   |> Day8.calculate_distances()
-    #   |> Enum.sort_by(fn [_, _, distance] -> distance end)
-    #   |> Enum.take(10)
-    #   |> Day8.connect([])
-    #   |> Enum.sort_by(&length/1),
-    #   limit: :infinity
-    # )
-
     assert Day8.product_of_connections(input(), 10) == 40
   end
 
@@ -101,5 +90,35 @@ defmodule Day8Test do
                [805, 96, 715]
              ]
            ]
+  end
+
+  test "connect until the end" do
+    assert input()
+           |> Day8.multiply_x_coordinates_of_last_two_junction_boxes_that_needs_to_be_connected() ==
+             25272
+
+    # points = input() |> Day8.parse_input()
+
+    # IO.inspect(
+    #   points
+    #   |> Day8.calculate_distances()
+    #   |> Enum.sort_by(fn [_, _, distance] -> distance end)
+    #   |> Enum.reduce_while([], fn connection, acc ->
+    #     case Day8.connect([connection], acc) do
+    #       [single_box] when length(single_box) == length(points) ->
+    #         {:halt, connection}
+
+    #       acc ->
+    #         {:cont, acc}
+    #     end
+    #   end),
+    #   limit: :infinity
+    # )
+
+    # assert input()
+    #        |> Day8.parse_input()
+    #        |> Day8.calculate_distances()
+    #        |> Enum.sort_by(fn [_, _, distance] -> distance end)
+    #        |> Day8.connect([]) == false
   end
 end
