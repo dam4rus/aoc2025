@@ -1,8 +1,15 @@
 defmodule Day8 do
-  @spec parse_input(String.t()) :: [[non_neg_integer()]]
+  @type coordinates() :: {non_neg_integer(), non_neg_integer(), non_neg_integer()}
+
+  @type distance() :: {coordinates(), coordinates(), float()}
+
+  @spec parse_input(String.t()) :: [coordinates()]
   def parse_input(input) when is_bitstring(input) do
     String.split(input, "\n")
-    |> Enum.map(fn line -> String.split(line, ",") |> Enum.map(&String.to_integer/1) end)
+    |> Enum.map(fn line ->
+      [x, y, z] = String.split(line, ",") |> Enum.map(&String.to_integer/1)
+      {x, y, z}
+    end)
   end
 
   @spec product_of_connections(String.t(), non_neg_integer()) :: non_neg_integer()
@@ -11,7 +18,7 @@ defmodule Day8 do
       input
       |> Day8.parse_input()
       |> Day8.calculate_distances()
-      |> Enum.sort_by(fn [_, _, distance] -> distance end)
+      |> Enum.sort_by(fn {_, _, distance} -> distance end)
       |> Enum.take(take)
       |> Day8.connect([])
       |> Enum.map(&length/1)
@@ -25,10 +32,10 @@ defmodule Day8 do
       when is_bitstring(input) do
     points = parse_input(input)
 
-    [[x1, _, _], [x2, _, _], _] =
+    {{x1, _, _}, {x2, _, _}, _} =
       points
       |> Day8.calculate_distances()
-      |> Enum.sort_by(fn [_, _, distance] -> distance end)
+      |> Enum.sort_by(fn {_, _, distance} -> distance end)
       |> Enum.reduce_while([], fn connection, acc ->
         case Day8.connect([connection], acc) do
           [single_box] when length(single_box) == length(points) ->
@@ -42,10 +49,10 @@ defmodule Day8 do
     x1 * x2
   end
 
-  @spec connect([[non_neg_integer()]], [[non_neg_integer()]]) :: [[non_neg_integer()]]
+  @spec connect([distance()], [coordinates()]) :: [coordinates()]
   def connect([], acc), do: acc
 
-  def connect([[pt1, pt2, _] | tail], acc) do
+  def connect([{pt1, pt2, _} | tail], acc) do
     pt1_index =
       Enum.find_index(acc, fn connections ->
         Enum.any?(connections, fn pt -> pt == pt1 end)
@@ -84,7 +91,7 @@ defmodule Day8 do
     end
   end
 
-  @spec calculate_distances([[non_neg_integer()]]) :: [[non_neg_integer()]]
+  @spec calculate_distances([coordinates()]) :: [distance()]
   def calculate_distances([]), do: []
 
   def calculate_distances([head | tail]),
@@ -92,11 +99,12 @@ defmodule Day8 do
 
   defp calculate_distances(_point1, []), do: []
 
-  defp calculate_distances([_x1, _y1, _z1] = point1, [[_x2, _y2, _z2] = point2 | tail]) do
-    [[point1, point2, distance(point1, point2)] | calculate_distances(point1, tail)]
+  defp calculate_distances({_x1, _y1, _z1} = point1, [{_x2, _y2, _z2} = point2 | tail]) do
+    [{point1, point2, distance(point1, point2)} | calculate_distances(point1, tail)]
   end
 
-  defp distance([x1, y1, z1], [x2, y2, z2]) do
+  @spec distance(coordinates(), coordinates()) :: float()
+  defp distance({x1, y1, z1}, {x2, y2, z2}) do
     ((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2) ** 0.5
   end
 end

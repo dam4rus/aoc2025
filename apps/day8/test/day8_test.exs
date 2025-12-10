@@ -32,62 +32,62 @@ defmodule Day8Test do
   end
 
   test "appends connection to empty accumulator" do
-    assert Day8.connect([[[162, 817, 812], [425, 690, 689], 0.0]], []) == [
+    assert Day8.connect([{{162, 817, 812}, {425, 690, 689}, 0.0}], []) == [
              [
-               [162, 817, 812],
-               [425, 690, 689]
+               {162, 817, 812},
+               {425, 690, 689}
              ]
            ]
   end
 
   test "appends connection to existing fuse box" do
-    assert Day8.connect([[[162, 817, 812], [431, 825, 988], 0.0]], [
-             [[162, 817, 812], [425, 690, 689]]
+    assert Day8.connect([{{162, 817, 812}, {431, 825, 988}, 0.0}], [
+             [{162, 817, 812}, {425, 690, 689}]
            ]) == [
              [
-               [431, 825, 988],
-               [162, 817, 812],
-               [425, 690, 689]
+               {431, 825, 988},
+               {162, 817, 812},
+               {425, 690, 689}
              ]
            ]
   end
 
   test "appends connection to a new fuse box" do
-    assert Day8.connect([[[906, 360, 560], [805, 96, 715], 0.0]], [
-             [[431, 825, 988], [162, 817, 812], [425, 690, 689]]
+    assert Day8.connect([{{906, 360, 560}, {805, 96, 715}, 0.0}], [
+             [{431, 825, 988}, {162, 817, 812}, {425, 690, 689}]
            ]) == [
              [
-               [906, 360, 560],
-               [805, 96, 715]
+               {906, 360, 560},
+               {805, 96, 715}
              ],
              [
-               [431, 825, 988],
-               [162, 817, 812],
-               [425, 690, 689]
+               {431, 825, 988},
+               {162, 817, 812},
+               {425, 690, 689}
              ]
            ]
   end
 
   test "does no appends" do
-    assert Day8.connect([[[431, 825, 988], [425, 690, 689], 0.0]], [
+    assert Day8.connect([{{431, 825, 988}, {425, 690, 689}, 0.0}], [
              [
-               [431, 825, 988],
-               [162, 817, 812],
-               [425, 690, 689]
+               {431, 825, 988},
+               {162, 817, 812},
+               {425, 690, 689}
              ],
              [
-               [906, 360, 560],
-               [805, 96, 715]
+               {906, 360, 560},
+               {805, 96, 715}
              ]
            ]) == [
              [
-               [431, 825, 988],
-               [162, 817, 812],
-               [425, 690, 689]
+               {431, 825, 988},
+               {162, 817, 812},
+               {425, 690, 689}
              ],
              [
-               [906, 360, 560],
-               [805, 96, 715]
+               {906, 360, 560},
+               {805, 96, 715}
              ]
            ]
   end
@@ -96,29 +96,5 @@ defmodule Day8Test do
     assert input()
            |> Day8.multiply_x_coordinates_of_last_two_junction_boxes_that_needs_to_be_connected() ==
              25272
-
-    # points = input() |> Day8.parse_input()
-
-    # IO.inspect(
-    #   points
-    #   |> Day8.calculate_distances()
-    #   |> Enum.sort_by(fn [_, _, distance] -> distance end)
-    #   |> Enum.reduce_while([], fn connection, acc ->
-    #     case Day8.connect([connection], acc) do
-    #       [single_box] when length(single_box) == length(points) ->
-    #         {:halt, connection}
-
-    #       acc ->
-    #         {:cont, acc}
-    #     end
-    #   end),
-    #   limit: :infinity
-    # )
-
-    # assert input()
-    #        |> Day8.parse_input()
-    #        |> Day8.calculate_distances()
-    #        |> Enum.sort_by(fn [_, _, distance] -> distance end)
-    #        |> Day8.connect([]) == false
   end
 end
